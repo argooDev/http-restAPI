@@ -40,3 +40,10 @@ go get github.com/sirupsen/logrus
 
 Для http сервера понадобится роутер, чтобы обрабатывать все входящие запросы.
 go get -u github.com/gorilla/mux    -    эта Библиотека как раз поможет создать роутер и работать с ним!
+
+
+Тесты, Библиотека - go get github.com/stretchr/testify
+Тесты будут в internal/app/apiserver/apiserver_internal_test
+internal потому что тестироваться будут внутренние непубличные методы, если бы тестировались публичные методы, то файл был бы apiserver_test
+
+Чтобы в тестах использовать библиотеку assert - go get github.com/stretchr/testify/assert@v1.9.0
