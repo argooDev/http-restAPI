@@ -36,3 +36,7 @@ go get github.com/BurntSushi/toml    -  обновляет go.mod файл и д
 go get github.com/sirupsen/logrus 
 У logrus есть много уровней логирования(debug, error, trace, warning, etc...)
 Нужно иметь возможность конфигурировать эти уровни с помощью config файлов
+
+
+Для http сервера понадобится роутер, чтобы обрабатывать все входящие запросы.
+go get -u github.com/gorilla/mux    -    эта Библиотека как раз поможет создать роутер и работать с ним!
