@@ -24,3 +24,6 @@ configs/apiserver.toml - файл с конфигом
 Добавляем в проект зависимость, которая нужна для парсинга конфиг файла - github.com/BurntSushi/toml
 
 go get github.com/BurntSushi/toml    -  обновляет go.mod файл и добавляет туда новую зависимость
+
+Библиотека toml позволяет парсить конфиг из файла apiserver.toml и записывать результат в перменную config. 
+Это происходит в файле main.go 
