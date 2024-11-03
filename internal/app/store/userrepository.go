@@ -26,5 +26,22 @@ func (r *UserRepository) Create(u *model.User) (*model.User, error) {
 
 // Необходим при авторизации, принимает email, возвращает модель/ошибку
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
-	return nil, nil
+
+	// Инициализируем юзера, в которого запишем данные из БД
+	u := &model.User{}
+	// QueryRow возвращает всегда 1 строку
+	// Передаем в том же порядке параметры в Scan
+	if err := r.store.db.QueryRow(
+		"SELECT id, email, encrypted_password FROM users WHERE email = $1",
+		email,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		return nil, err
+	}
+
+	// Если ошибок нет - возращаем заполненного юзера
+	return u, nil
 }
