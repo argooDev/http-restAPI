@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/argooDev/http-restAPI/internal/app/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
@@ -13,6 +14,7 @@ type APIServer struct {
 	config *Config
 	logger *logrus.Logger
 	router *mux.Router
+	store  *store.Store
 }
 
 // Функция New инициализирует apiserver и возвращает сконфигурированный экземпляр  APIServer struct
@@ -34,6 +36,12 @@ func (server *APIServer) Start() error {
 
 	// Вызов роутера
 	server.configureRouter()
+
+	// Конфигурируем хранилище, вызываем метод Open, если ок - записываем в переменную store наше хранилище
+	// если нет - кидаем ошибку
+	if err := server.configureStore(); err != nil {
+		return err
+	}
 
 	// Если никаких ошибок нет и сервак поднялся - выводит инфо-сообщение
 	server.logger.Info("Starting apiserver!!!")
@@ -60,6 +68,21 @@ func (server *APIServer) configureLogger() error {
 func (server *APIServer) configureRouter() {
 
 	server.router.HandleFunc("/hello", server.handleHello())
+}
+
+// Функция конфигурации хранилища
+func (server *APIServer) configureStore() error {
+	st := store.New(server.config.Store)
+
+	// Открываем хранилище
+	if err := st.Open(); err != nil {
+		return err
+	}
+
+	// Если нет ошибки открытия, то записываем в переменную store
+	server.store = st
+
+	return nil
 }
 
 // Возвращает интерфейс, это позволяет внутри функции определять какие-то переменные, типы и тд
