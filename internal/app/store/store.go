@@ -7,8 +7,9 @@ import (
 )
 
 type Store struct {
-	config *Config
-	db     *sql.DB
+	config         *Config
+	db             *sql.DB
+	userRepository *UserRepository
 }
 
 // Обрабатывает store и возвращает уже сконфигурированный
@@ -40,4 +41,19 @@ func (server *Store) Open() error {
 // Отключение от БД и тд
 func (server *Store) Close() {
 	server.db.Close()
+}
+
+// Чтобы репозиториями могли пользоваться только из хранилища - используем User метод
+// Внешние источники смогут использовать репки через этот метод
+func (server *Store) User() *UserRepository {
+	if server.userRepository != nil {
+		return server.userRepository
+	}
+
+	// Инициализируем репку если ее нет
+	server.userRepository = &UserRepository{
+		store: server,
+	}
+
+	return server.userRepository
 }

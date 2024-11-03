@@ -62,9 +62,23 @@ sudo apt install postgresql             - установка postgres
 sudo -u postgres psql                   - вход в оболочку postgres
 \du                                     - список пользователей, по умолчанию там postgres
 \l                                      - список БД
+\dt                                     - посмотреть список таблицу
+\d tableName                            - посмотреть конкретную таблицу    
 \q                                      - выход
 \d                                      - показывает отношения
 CREATE USER argodev WITH PASSWORD '1';  - добавляет пользователя с паролем
 ALTER USER argodev WITH SUPERUSER;      - из обычного делает superuser
 DROP USER argodev;                      - удаляет юзера
 DROP DATABASE dbname;                   - удаляет БД
+
+
+Миграции - перенос инфы из одной бд в другую бд 
+(up(продвигает базу вперед)|down(откатывает миграцию)):
+Качаем с github релиз версию, через deb ставим на систему       - Используем утилиту - migrate
+Создать Миграцию -      migrate -path migrations -database "postgres://localhost/restapi_dev?sslmode=disable" up
+В up - создаем таблицу, в down - дропаем ее
+
+
+internal/app/model - Хранит все структуры, которые являются представлениями записей в БД (модели данных)
+
+Модели не знают о взаимодействии с БД, за работу с БД отвечают репозитории -internal/app/store/userrepository.go 
