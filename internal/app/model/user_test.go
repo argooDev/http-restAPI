@@ -63,6 +63,17 @@ func TestUser_Validate(t *testing.T) {
 			},
 			isValid: false,
 		},
+		{
+			// Пользователь валиден даже с шифрованным паролем
+			name: "with encrypted password",
+			u: func() *model.User {
+				u := model.TestUser(t)
+				u.Password = ""
+				u.EncryptedPassword = "encryptedpassword"
+				return u
+			},
+			isValid: true,
+		},
 	}
 
 	// Итерирует по testCases и запускает их

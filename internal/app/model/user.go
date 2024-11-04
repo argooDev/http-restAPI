@@ -18,7 +18,12 @@ func (u *User) Validate() error {
 	return validation.ValidateStruct(
 		u,
 		validation.Field(&u.Email, validation.Required, is.Email), // Указываем значение для валидации, далее указываем правила валидации
-		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
+
+		// При чтении юзера из БД, мы не записываем ему password, мы записываем шифрованный пароль в encryptedPassword
+		// Это можно посмотреть в internal/app/store/userrepository FindByEmail
+		// Из-за этого password будет пустым и модель пользователя будет невалидной при следующем сохранении юзера в БД
+		// validation.By() фиксит это. В нее добавляем кастомные проверки, они будут в validations.go
+		validation.Field(&u.Password, validation.By(requiredIf(u.EncryptedPassword == "")), validation.Length(6, 100)),
 	)
 }
 
