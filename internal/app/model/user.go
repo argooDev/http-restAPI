@@ -1,6 +1,10 @@
 package model
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
+	"golang.org/x/crypto/bcrypt"
+)
 
 // User соответствует схеме в Бд
 type User struct {
@@ -8,6 +12,14 @@ type User struct {
 	Email             string
 	Password          string
 	EncryptedPassword string
+}
+
+func (u *User) Validate() error {
+	return validation.ValidateStruct(
+		u,
+		validation.Field(&u.Email, validation.Required, is.Email), // Указываем значение для валидации, далее указываем правила валидации
+		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
+	)
 }
 
 // Callback функция, вызывается каждый раз при попытке сохранения пользователя в БД с помощью Create

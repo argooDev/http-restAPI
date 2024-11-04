@@ -94,3 +94,7 @@ store_test.go - позволит избежать хардкода БД и ко�
 userrepository_test.go - в нем будут тесты для метода create и findbyemail
 
 go get golang.org/x/crypto  -   Для шифрования использую bcrypt 
+
+go get github.com/go-ozzo/ozzo-validation       }
+                                                Валидация данных будет реализована с помощью ozzo-validation
+go get github.com/go-ozzo/ozzo-validation/is    }

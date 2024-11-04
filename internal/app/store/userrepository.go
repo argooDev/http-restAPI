@@ -10,6 +10,11 @@ type UserRepository struct {
 // Принимает на вход модель, возвращает модель
 func (r *UserRepository) Create(u *model.User) (*model.User, error) {
 
+	// Проверяем юзера на валидность, если все ок, то BeforeCreate -> Create и запись юзера в БД
+	if err := u.Validate(); err != nil {
+		return nil, err
+	}
+
 	// Выполняем вызов функции перед добавлением юзера в БД
 	if err := u.BeforeCreate(); err != nil {
 		return nil, err
