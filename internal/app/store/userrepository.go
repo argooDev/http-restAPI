@@ -10,6 +10,11 @@ type UserRepository struct {
 // Принимает на вход модель, возвращает модель
 func (r *UserRepository) Create(u *model.User) (*model.User, error) {
 
+	// Выполняем вызов функции перед добавлением юзера в БД
+	if err := u.BeforeCreate(); err != nil {
+		return nil, err
+	}
+
 	// Передаем sql запрос, returning id - psql по умолчанию не возвращает id, поэтому делаю так
 	// Scan - после того, как запрос возвращает строку, он сможет смапить в переданные аргументы(&u.ID)
 	if err := r.store.db.QueryRow(

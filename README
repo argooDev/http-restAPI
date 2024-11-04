@@ -84,12 +84,13 @@ internal/app/model - Хранит все структуры, которые яв
 Модели не знают о взаимодействии с БД, за работу с БД отвечают репозитории -internal/app/store/userrepository.go 
 
 
-testing.go - возвращает тестовый store, который будет сконфигурирован 
+store/testing.go - возвращает тестовый store, который будет сконфигурирован 
 и функцию, которая позволит очищать заполненные таблицы, чтобы следующие тесты работали с пустой БД
 
 store_test.go - позволит избежать хардкода БД и конфигурить ее, с помощью env переменных
 Создаем БД restapi_test, 
 прогоняем миграцию migrate -path migrations -database "postgres://localhost/restapi_test?sslmode=disable" up
 
-
 userrepository_test.go - в нем будут тесты для метода create и findbyemail
+
+go get golang.org/x/crypto  -   Для шифрования использую bcrypt 

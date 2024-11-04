@@ -15,9 +15,7 @@ func TestUserRepository_Create(t *testing.T) {
 	defer teardown("users") // Вызываем функцию teardown и очищаем таблицу users
 
 	// Создаем пользователя, передаем модель юзера в метод create
-	u, err := s.User().Create(&model.User{
-		Email: "user@example.org",
-	})
+	u, err := s.User().Create(model.TestUser(t))
 	// С помощью testify проверяем что нет ошибок и что юзер не nil
 	assert.NoError(t, err)
 	assert.NotNil(t, u)
@@ -34,12 +32,13 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 	_, err := s.User().FindByEmail(email)
 	assert.Error(t, err) // Проверяем корректность
 
+	u := model.TestUser(t)
+	u.Email = email
+
 	// 2 случай: Пользователь есть в БД, попытка прочитать его
-	s.User().Create(&model.User{
-		Email: "user@example.org",
-	})
+	s.User().Create(u)
 	// Не ожидаем ошибку, ждем что юзер != nil
-	u, err := s.User().FindByEmail(email)
+	u, err = s.User().FindByEmail(email)
 	assert.NoError(t, err)
 	assert.NotNil(t, u)
 }
